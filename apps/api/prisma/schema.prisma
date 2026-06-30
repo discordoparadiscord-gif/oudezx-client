@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  uuid          String    @unique
+  username      String    @unique
+  email         String    @unique
+  passwordHash  String
+  role          String    @default("user")
+  banned        Boolean   @default(false)
+  banReason     String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions      Session[]
+  cosmetics     Cosmetic[]
+  waypoints     Waypoint[]
+  friends       Friend[]  @relation("user_friends")
+  friendOf      Friend[]  @relation("friend_of")
+
+  @@map("users")
+}
+
+model Session {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token         String    @unique
+  refreshToken  String    @unique
+  expiresAt     DateTime
+  createdAt     DateTime  @default(now())
+
+  @@map("sessions")
+}
+
+model Cosmetic {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type          String    // "cape", "wings", "hat", "emote", "badge"
+  itemId        String
+  item          CosmeticItem @relation(fields: [itemId], references: [id])
+  equipped      Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+
+  @@unique([userId, itemId])
+  @@map("cosmetics")
+}
+
+model CosmeticItem {
+  id            String    @id @default(cuid())
+  name          String    @unique
+  description   String?
+  type          String    // "cape", "wings", "hat", "emote", "badge"
+  model         String    // Path to model file
+  texture       String    // Path to texture file
+  price         Int       @default(0) // In credits
+  rarity        String    @default("common")
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  cosmetics     Cosmetic[]
+
+  @@map("cosmetic_items")
+}
+
+model Waypoint {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name          String
+  x             Int
+  y             Int
+  z             Int
+  color         Int
+  dimension     String    @default("overworld")
+  visible       Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("waypoints")
+}
+
+model Friend {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation("user_friends", fields: [userId], references: [id], onDelete: Cascade)
+  friendId      String
+  friend        User      @relation("friend_of", fields: [friendId], references: [id], onDelete: Cascade)
+  status        String    @default("pending") // pending, accepted, blocked
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([userId, friendId])
+  @@map("friends")
+}
+
+model AuditLog {
+  id            String    @id @default(cuid())
+  action        String
+  targetId      String?
+  targetType    String?
+  changes       String?   // JSON string
+  performedBy   String?
+  ipAddress     String?
+  timestamp     DateTime  @default(now())
+
+  @@map("audit_logs")
+}
