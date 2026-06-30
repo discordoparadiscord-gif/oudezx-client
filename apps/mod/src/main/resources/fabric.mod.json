@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "oudezx-client",
+  "version": "1.0.0",
+  "name": "Oudezx Client",
+  "description": "A complete Minecraft client mod with utilities and HUDs",
+  "authors": [
+    {
+      "name": "Oudezx Team",
+      "contact": {}
+    }
+  ],
+  "contact": {},
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.oudezx.OudezxClient"
+    ],
+    "client": [
+      "com.oudezx.OudezxClientEvents"
+    ]
+  },
+  "mixins": [
+    "oudezx.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.0",
+    "fabric-api": "*",
+    "minecraft": "1.20.1"
+  }
+}

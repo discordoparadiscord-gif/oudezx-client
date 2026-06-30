@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.oudezx</groupId>
+    <artifactId>oudezx-client</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>Oudezx Client</name>
+    <description>Minecraft Fabric Client Mod</description>
+
+    <properties>
+        <minecraft.version>1.20.1</minecraft.version>
+        <yarn.mappings>1.20.1+build.10</yarn.mappings>
+        <loader.version>0.14.22</loader.version>
+        <fabric.version>0.84.0+1.20.1</fabric.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>fabric</id>
+            <name>Fabric</name>
+            <url>https://maven.fabricmc.net/</url>
+        </repository>
+        <repository>
+            <id>modrinth</id>
+            <name>Modrinth</name>
+            <url>https://api.modrinth.com/maven</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.fabricmc</groupId>
+            <artifactId>fabric-loader</artifactId>
+            <version>${loader.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.fabricmc.fabric-api</groupId>
+            <artifactId>fabric-api</artifactId>
+            <version>${fabric.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.minecraft</groupId>
+            <artifactId>minecraft</artifactId>
+            <version>${minecraft.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.fabricmc</groupId>
+            <artifactId>yarn</artifactId>
+            <version>${yarn.mappings}</version>
+            <classifier>v2</classifier>
+        </dependency>
+
+        <!-- JSON library -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
+        <!-- HTTP Client -->
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.2.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>net.fabricmc</groupId>
+                <artifactId>fabric-loom</artifactId>
+                <version>1.4.9</version>
+                <configuration>
+                    <decompilers>
+                        <decompiler>cfr</decompiler>
+                    </decompilers>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
